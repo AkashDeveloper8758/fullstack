@@ -9,6 +9,7 @@ const expressLayout = require("express-ejs-layouts");
 const mongoose = require("mongoose");
 //ROUTES
 const authorRoutes = require('./routes/authors')
+const bookRoutes = require('./routes/books')
 const routes = require("./routes/index");
 
 //SET
@@ -22,6 +23,7 @@ app.use(express.static("public"));
 app.use(express.urlencoded({extended:false,limit:'5mb'}))
 app.use("/", routes);
 app.use('/author',authorRoutes)
+app.use('/books',bookRoutes)
 // mongo db
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection
