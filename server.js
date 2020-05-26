@@ -6,24 +6,27 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const expressLayout = require("express-ejs-layouts");
-const routes = require("./routes/index");
 const mongoose = require("mongoose");
-// require('dotenv').config()
+//ROUTES
+const authorRoutes = require('./routes/authors')
+const routes = require("./routes/index");
 
+//SET
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.set("layout", "layouts/layout");
-
+//USE
 app.use(expressLayout);
 app.use(express.static("public"));
+// app.use(express.json())
+app.use(express.urlencoded({extended:false,limit:'5mb'}))
+app.use("/", routes);
+app.use('/author',authorRoutes)
 // mongo db
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
 const db = mongoose.connection
 
 db.on('error',error=>console.error(error))
 db.once('open',()=>console.log('connected to mongoDB'))
-
-
-app.use("/", routes);
 
 app.listen(process.env.PORT || 5000, () => console.log("server is runing "));
