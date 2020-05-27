@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const path = require('path')
-const bookCoverBasePath = 'uploads/bookCover'
 const bookSchema = new mongoose.Schema({
     title:{
         type:String,
@@ -17,8 +16,13 @@ const bookSchema = new mongoose.Schema({
         type:Number,
         required:true
     },
-    coverImageName:{
+    coverImage:{
+        type:Buffer,
+        required:true
+    },
+    coverImagetype:{
         type:String,
+        required:true
     },
     createdAt:{
         type:Date,
@@ -32,9 +36,11 @@ const bookSchema = new mongoose.Schema({
     }
 })
 bookSchema.virtual('coverImagePath').get(function(){
-    if(this.coverImageName != null){
-        return path.join('/',bookCoverBasePath,this.coverImageName)
+    if(this.coverImage != null && this.coverImagetype != null){
+        const imageSrc =  `data:${this.coverImagetype};charset=utf-8;base64,${this.coverImage.toString('base64')}`
+        return imageSrc
+    }else{
+        console.log('condition fails of parsing buffer')
     }
 })
 module.exports = mongoose.model('Book',bookSchema)
-module.exports.bookCoverBasePath = bookCoverBasePath
