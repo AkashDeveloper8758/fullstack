@@ -1,9 +1,13 @@
 <form action="/author" method="GET">
-<label>Name</label>
-<input type="text" name="name" value="<%= queryOption.name %> ">
-<button type="submit">Search</button>
+    <label>Name</label>
+    <input type="text" name="name" value="<%= queryOption.name %> ">
+    <button type="submit">Search</button>
 </form>
 <br>
 <% author.forEach(item => { %>
 <div> <%= item.name %> </div>
- <% }) %> 
+<a href="/author/<%= item.id %>">view</a>
+<a href="/author/<%= item.id %>/edit">edit</a>
+<%- include('../partials/delete_form',
+                       { url:`/author/${item.id}`}) %>
+<% }) %>
